@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Statistics</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .table {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        thead th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text {
+            margin-bottom: 20px;
+        }
+
+        .action-buttons button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="header-text">
+        <h4>Order Statistics</h4>
+        <label>Date From:</label>
+        <input type="date" th:value="${startDate}">
+        <label>To:</label>
+        <input type="date" th:value="${endDate}">
+        <button class="btn btn-primary" th:onclick="'viewOrders()'">View</button>
+        <button class="btn btn-success" th:onclick="'viewTopOrders()'">View Top</button>
+    </div>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã Đơn Hàng</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Giá (USD)</th>
+            <th>Loại sản phẩm</th>
+            <th>Ngày Mua</th>
+            <th>Số lượng</th>
+            <th>Tổng tiền (USD)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order, iterStat : ${orders.content}">
+            <td th:text="${iterStat.index + 1}">1</td>
+            <td th:text="${order.orderId}">101</td>
+            <td th:text="${order.product.productName}">Sample Product</td>
+            <td th:text="${order.product.price}">99.99</td>
+            <td th:text="${order.product.status}">Available</td>
+            <td th:text="${order.formattedDate}"></td>
+            <td th:text="${order.quantity}">1</td>
+            <td th:text="${order.getTotalPrice()}">99.99</td>
+            <td>
+                <a th:href="@{/order/update/{id}(id=${order.orderId})}" class="btn btn-warning">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:classappend="${orders.hasPrevious()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/order(page=${orders.number - 1})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(0, orders.totalPages - 1)}"
+                th:classappend="${page == orders.number} ? 'active'">
+                <a class="page-link" th:href="@{/order(page=${page})}" th:text="${page + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${orders.hasNext()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/order(page=${orders.number + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

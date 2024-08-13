@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh sửa đơn hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Chỉnh sửa đơn hàng</h2>
+    <form th:action="@{/order/update/{id}(id=${order.orderId})}" method="post" th:object="${order}" class="mt-4">
+        <div class="form-group">
+            <label for="orderId">Mã đơn hàng:</label>
+            <input type="text" class="form-control" id="orderId" th:field="*{orderId}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="productName">Tên sản phẩm:</label>
+            <input type="text" class="form-control" id="productName" th:field="*{product.productName}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Giá (USD):</label>
+            <input type="number" class="form-control" id="price" th:field="*{product.price}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Số lượng:</label>
+            <input type="number" class="form-control" id="quantity" th:field="*{quantity}" min="1" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a th:href="@{/order}" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
